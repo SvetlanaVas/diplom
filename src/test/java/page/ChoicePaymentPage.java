@@ -19,6 +19,7 @@ public class ChoicePaymentPage {
     }
 
     public void openCreditPaymentPage() {
+
         creditButton.click();
     }
 }

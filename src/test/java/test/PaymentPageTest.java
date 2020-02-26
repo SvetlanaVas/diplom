@@ -59,4 +59,30 @@ public class PaymentPageTest {
         creditPaymentPage.getValidCardData(cardInfo);
         creditPaymentPage.errorVerify();
     }
+    @Test
+    @DisplayName("should get error text if pay by approved debit card and invalid name owner's card")
+    void shouldGetErrorWithDebitApprovedCardAndInvalidOwner() {
+        val choicePaymentPage = new ChoicePaymentPage();
+        choicePaymentPage.openChoicePaymentPage();
+        choicePaymentPage.openDebitPaymentPage();
+        val approvedCardInfo = DataHelper.approvedCardInfo();
+        val cardInfo = DataHelper.getCardInfoRus();
+        val debitPaymentPage = new DebitPaymentPage();
+        debitPaymentPage.getCardNumber(approvedCardInfo);
+        debitPaymentPage.getValidCardData(cardInfo);
+        debitPaymentPage.errorVerify();
+    }
+    @Test
+    @DisplayName("should get error text if pay by approved credit card and invalid name owner's card")
+    void shouldGetErrorWithCreditApprovedCardAndInvalidOwner() {
+        val choicePaymentPage = new ChoicePaymentPage();
+        choicePaymentPage.openChoicePaymentPage();
+        choicePaymentPage.openCreditPaymentPage();
+        val approvedCardInfo = DataHelper.approvedCardInfo();
+        val cardInfo = DataHelper.getCardInfoRus();
+        val creditPaymentPage = new CreditPaymentPage();
+        creditPaymentPage.getCardNumber(approvedCardInfo);
+        creditPaymentPage.getValidCardData(cardInfo);
+        creditPaymentPage.errorVerify();
+    }
 }

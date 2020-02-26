@@ -1,6 +1,8 @@
 package data;
 import com.github.javafaker.Faker;
 import lombok.Value;
+
+import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Random;
 
@@ -23,16 +25,26 @@ public class DataHelper {
         String owner = transliterate(getRussianOwnerName());
         return new CardInfo(month, year, cvc, owner);
     }
-
+    public static CardInfo getCardInfoRus() {
+        String month = getRandomMonth();
+        String year = getRandomYear();
+        String cvc = getRandomCVC();
+        String owner = getRussianOwnerName();
+        return new CardInfo(month, year, cvc, owner);
+    }
     public static String getRandomMonth() {
         String[] months = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
         Random random = new Random();
         int index = random.nextInt(months.length);
         return (months[index]);
     }
-
+     /*public static String getRandomMonth() {
+         LocalDate today = LocalDate.now();
+         String month  = String.format("%tm", today.plusMonths(2));
+         return (month);
+     }*/
     public static String getRandomYear() {
-        String[] years = {"20", "21", "22"};
+        String[] years = {"21", "22"};
         Random random = new Random();
         int index = random.nextInt(years.length);
         return (years[index]);
