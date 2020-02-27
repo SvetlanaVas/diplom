@@ -25,6 +25,13 @@ public class DataHelper {
         String owner = transliterate(getRussianOwnerName());
         return new CardInfo(month, year, cvc, owner);
     }
+    public static CardInfo getCardInfo1() {
+        String month = getMonth();
+        String year = getRandomYear();
+        String cvc = getRandomCVC();
+        String owner = transliterate(getRussianOwnerName());
+        return new CardInfo(month, year, cvc, owner);
+    }
     public static CardInfo getCardInfoRus() {
         String month = getRandomMonth();
         String year = getRandomYear();
@@ -38,11 +45,11 @@ public class DataHelper {
         int index = random.nextInt(months.length);
         return (months[index]);
     }
-     /*public static String getRandomMonth() {
+     public static String getMonth() {
          LocalDate today = LocalDate.now();
-         String month  = String.format("%tm", today.plusMonths(2));
+         String month  = String.format("%tm", today.minusMonths(1));
          return (month);
-     }*/
+     }
     public static String getRandomYear() {
         String[] years = {"21", "22"};
         Random random = new Random();
