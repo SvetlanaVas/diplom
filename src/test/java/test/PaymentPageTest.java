@@ -6,167 +6,176 @@ import org.junit.jupiter.api.Test;
 import page.DebitPaymentPage;
 import page.CreditPaymentPage;
 import page.ChoicePaymentPage;
-import page.InvalidData;
+
 
 public class PaymentPageTest {
+
+    //Happy Tests
     @Test
-    @DisplayName("should get success notification if pay by approved debit card and valid data card")
+    @DisplayName("должен быть успешно куплен тур  Approved дебетовой картой  при заполнении заявки валидными данными")
     void shouldBuyTourWithDebitApprovedCardAndValidData() {
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
         choicePaymentPage.openDebitPaymentPage();
         val approvedCardInfo = DataHelper.approvedCardInfo();
-        val cardInfo = DataHelper.getCardInfo();
+        val cardInfo = DataHelper.getValidCardInfo();
         val debitPaymentPage = new DebitPaymentPage();
         debitPaymentPage.getCardNumber(approvedCardInfo);
-        debitPaymentPage.getValidCardData(cardInfo);
-        debitPaymentPage.validVerify();
+        debitPaymentPage.putValidDataApprovedCard(cardInfo);
+
     }
+
+    //Bug
     @Test
-    @DisplayName("should get error notification if pay by declined debit card and valid data card ")
+    @DisplayName("должен быть отказ в проведении операции с Declined дебетовой картой при заполнении заявки валидными данными")
     void shouldGetErrorWithDebitDeclinedCardAndValidData() {
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
         choicePaymentPage.openDebitPaymentPage();
         val declinedCardInfo = DataHelper.declinedCardInfo();
-        val cardInfo = DataHelper.getCardInfo();
+        val cardInfo = DataHelper.getValidCardInfo();
         val debitPaymentPage = new DebitPaymentPage();
-        debitPaymentPage.getValidCardData(cardInfo);
+        debitPaymentPage.putValidDataDeclinedCard(cardInfo);
         debitPaymentPage.errorVerify();
     }
+
     @Test
-    @DisplayName("should get success notification if pay by approved credit card and valid data card")
+    @DisplayName("должен быть успешно куплен тур Approved кредитной картой при заполнении заявки валидными данными")
     void shouldBuyTourWithCreditApprovedCardAndValidData() {
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
         choicePaymentPage.openCreditPaymentPage();
         val approvedCardInfo = DataHelper.approvedCardInfo();
-        val cardInfo = DataHelper.getCardInfo();
+        val cardInfo = DataHelper.getValidCardInfo();
         val creditPaymentPage = new CreditPaymentPage();
         creditPaymentPage.getCardNumber(approvedCardInfo);
-        creditPaymentPage.getValidCardData(cardInfo);
+        creditPaymentPage.putValidDataApprovedCard(cardInfo);
         creditPaymentPage.validVerify();
     }
     @Test
-    @DisplayName("should get error notification if pay by declined credit card and valid data card")
+    @DisplayName("должен быть отказ в проведении операции с Declined кредитной картой при заполнении заявки валидными данными")
     void  shouldGetErrorWithCreditDeclinedCardAndValidData(){
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
         choicePaymentPage.openCreditPaymentPage();
         val declinedCardInfo = DataHelper.declinedCardInfo();
-        val cardInfo = DataHelper.getCardInfo();
+        val cardInfo = DataHelper.getValidCardInfo();
         val creditPaymentPage = new CreditPaymentPage();
         creditPaymentPage.getCardNumber(declinedCardInfo);
-        creditPaymentPage.getValidCardData(cardInfo);
+        creditPaymentPage.putValidDataDeclinedCard(cardInfo);
         creditPaymentPage.errorVerify();
     }
+
+    //Sad Tests
     @Test
-    @DisplayName("should get error text if pay by approved debit card and invalid name owner's card")
-    void shouldGetErrorWithDebitApprovedCardAndInvalidOwner() {
+    @DisplayName("должна показаться строка-напоминание об ошибке при заполнении всех полей невалидными значениями и дебетовой карте")
+    void shouldGetErrorWithDebitCardAndAllInvalidData() {
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
         choicePaymentPage.openDebitPaymentPage();
-        val approvedCardInfo = DataHelper.approvedCardInfo();
-        val cardInfo = DataHelper.getCardInfoRus();
         val debitPaymentPage = new DebitPaymentPage();
-        debitPaymentPage.getCardNumber(approvedCardInfo);
-        debitPaymentPage.getValidCardData(cardInfo);
-        debitPaymentPage.errorVerify();
+        debitPaymentPage.checkAllInvalidData();
     }
+
     @Test
-    @DisplayName("should get error text if pay by approved credit card and invalid name owner's card")
-    void shouldGetErrorWithCreditApprovedCardAndInvalidOwner() {
+    @DisplayName("должна показаться строка-напоминание об ошибке при заполнении всех полей невалидными значениями и кредитной карте")
+    void shouldGetErrorWithCreditCardAndAllInvalidData() {
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
         choicePaymentPage.openCreditPaymentPage();
-        val approvedCardInfo = DataHelper.approvedCardInfo();
-        val cardInfo = DataHelper.getCardInfoRus();
         val creditPaymentPage = new CreditPaymentPage();
-        creditPaymentPage.getCardNumber(approvedCardInfo);
-        creditPaymentPage.getValidCardData(cardInfo);
-        creditPaymentPage.errorVerify();
+        creditPaymentPage.checkAllInvalidData();
     }
+//Bug
     @Test
-    @DisplayName("should get error text if pay by approved credit card and empty name owner's card")
-    void shouldGetErrorWithCreditApprovedCardAndEmptyOwner() {
-        val choicePaymentPage = new ChoicePaymentPage();
-        choicePaymentPage.openChoicePaymentPage();
-        choicePaymentPage.openCreditPaymentPage();
-        val invalidData = new InvalidData();
-        val approvedCardInfo = DataHelper.approvedCardInfo();
-        val cardInfo = DataHelper.getCardInfo();
-        invalidData.getCardNumber(approvedCardInfo);
-        invalidData.putEmptyOwner(cardInfo);
-    }
-    @Test
-    @DisplayName("should get error text if pay by approved debit card and empty card number")
-    void shouldGetErrorWithDebitApprovedCardAndEmptyCard() {
+    @DisplayName("должна появиться строка-напоминание об ошибке при заполнения поля Владелец кириллицей при Approved дебетовой карте")
+    void shouldGetErrorWithDebitCardAndInvalidOwner() {
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
         choicePaymentPage.openDebitPaymentPage();
-        val invalidData = new InvalidData();
-        val cardInfo = DataHelper.getCardInfo();
-        invalidData.putEmptyCardNumber(cardInfo);
+        val approvedCardInfo = DataHelper.approvedCardInfo();
+        val cardInfo = DataHelper.getValidCardInfo();
+        val debitPaymentPage = new DebitPaymentPage();
+        debitPaymentPage.checkRussianOwnerName(DataHelper.InvalidCardInfo.getInvalidCardInfo().getOwnerNameRus(),cardInfo);
     }
     @Test
-    @DisplayName("should get error text if pay by approved credit card and empty month")
+    @DisplayName("должна появиться строка-напоминание об ошибке при заполнения поля Месяц значением предыдущего месяца текущего года")
+    void shouldGetErrorWithDebitCardAndPastMonth() {
+        val choicePaymentPage = new ChoicePaymentPage();
+        choicePaymentPage.openChoicePaymentPage();
+        choicePaymentPage.openDebitPaymentPage();
+        val approvedCardInfo = DataHelper.approvedCardInfo();
+        val cardInfo = DataHelper.getValidCardInfo();
+        val debitPaymentPage = new DebitPaymentPage();
+        debitPaymentPage.checkPastMonth(DataHelper.InvalidCardInfo.getInvalidCardInfo().getPastMonth(),cardInfo);
+    }
+    @Test
+    @DisplayName("должна появиться строка-напоминание об ошибке при незаполнении поля Месяц")
     void shouldGetErrorWithCreditApprovedCardAndEmptyMonth() {
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
-        choicePaymentPage.openCreditPaymentPage();
-        val invalidData = new InvalidData();
+        choicePaymentPage.openDebitPaymentPage();
         val approvedCardInfo = DataHelper.approvedCardInfo();
-        val cardInfo = DataHelper.getCardInfo();
-        invalidData.getCardNumber(approvedCardInfo);
-        invalidData.putEmptydMonth(cardInfo);
+        val cardInfo = DataHelper.getValidCardInfo();
+        val debitPaymentPage = new DebitPaymentPage();
+        debitPaymentPage.checkEmptyMonth(cardInfo);
     }
     @Test
-    @DisplayName("should get error text if pay by approved debit card and invalid month")
-    void shouldGetErrorWithDebitApprovedCardAndInvalidMonth() {
+    @DisplayName("должна появиться строка-напоминание об ошибке при незаполнении поля Номер карты")
+    void shouldGetErrorWithDebitCardAndEmptyCard() {
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
         choicePaymentPage.openDebitPaymentPage();
-        val invalidData = new InvalidData();
         val approvedCardInfo = DataHelper.approvedCardInfo();
-        val cardInfo = DataHelper.getCardInfo1();
-        invalidData.getCardNumber(approvedCardInfo);
-        invalidData.putInvalidMonth(cardInfo);
+        val cardInfo = DataHelper.getValidCardInfo();
+        val debitPaymentPage = new DebitPaymentPage();
+        debitPaymentPage.checkEmptyNumber(cardInfo);
     }
     @Test
-    @DisplayName("should get error text if pay by approved credit card and empty year")
-    void shouldGetErrorWithCreditApprovedCardAndEmptyYear() {
-        val choicePaymentPage = new ChoicePaymentPage();
-        choicePaymentPage.openChoicePaymentPage();
-        choicePaymentPage.openCreditPaymentPage();
-        val invalidData = new InvalidData();
-        val approvedCardInfo = DataHelper.approvedCardInfo();
-        val cardInfo = DataHelper.getCardInfo();
-        invalidData.getCardNumber(approvedCardInfo);
-        invalidData.putEmptyYear(cardInfo);
-    }
-    @Test
-    @DisplayName("should get error text if pay by approved credit card and empty cvc")
-    void shouldGetErrorWithCreditApprovedCardAndEmptyCVC() {
-        val choicePaymentPage = new ChoicePaymentPage();
-        choicePaymentPage.openChoicePaymentPage();
-        choicePaymentPage.openCreditPaymentPage();
-        val invalidData = new InvalidData();
-        val approvedCardInfo = DataHelper.approvedCardInfo();
-        val cardInfo = DataHelper.getCardInfo();
-        invalidData.getCardNumber(approvedCardInfo);
-        invalidData.putEmptyCVC(cardInfo);
-    }
-    @Test
-    @DisplayName("should get error text if pay by approved credit card and invalid cvc")
-    void shouldGetErrorWithCreditApprovedCardAndInvalidCVC() {
+    @DisplayName("должна появиться строка-напоминание о необходимости заполнения поля Владелец")
+    void shouldGetErrorWithDebitCardAndEmptyOwner() {
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
         choicePaymentPage.openDebitPaymentPage();
-        val invalidData = new InvalidData();
         val approvedCardInfo = DataHelper.approvedCardInfo();
-        val cardInfo = DataHelper.getCardInfo();
-        invalidData.getCardNumber(approvedCardInfo);
-        invalidData.putInvalidCVC(cardInfo);
+        val cardInfo = DataHelper.getValidCardInfo();
+        val debitPaymentPage = new DebitPaymentPage();
+        debitPaymentPage.checkEmptyOwner(cardInfo);
     }
+    @Test
+    @DisplayName("должна появиться строка-напоминание об ошибке при заполнения поля Год значением на 10 лет больше текущего года")
+    void shouldGetErrorWithDebitCardAndFutureYear() {
+        val choicePaymentPage = new ChoicePaymentPage();
+        choicePaymentPage.openChoicePaymentPage();
+        choicePaymentPage.openDebitPaymentPage();
+        val approvedCardInfo = DataHelper.approvedCardInfo();
+        val cardInfo = DataHelper.getValidCardInfo();
+        val debitPaymentPage = new DebitPaymentPage();
+        debitPaymentPage.checkFutureYear(DataHelper.InvalidCardInfo.getInvalidCardInfo().getFutureYear(),cardInfo);
+    }
+    @Test
+    @DisplayName("должна появиться строка-напоминание об ошибке при незаполнении поля Год")
+    void shouldGetErrorWithDebitCardAndInvalidMonth() {
+        val choicePaymentPage = new ChoicePaymentPage();
+        choicePaymentPage.openChoicePaymentPage();
+        choicePaymentPage.openDebitPaymentPage();
+        val approvedCardInfo = DataHelper.approvedCardInfo();
+        val cardInfo = DataHelper.getValidCardInfo();
+        val debitPaymentPage = new DebitPaymentPage();
+        debitPaymentPage.checkEmptyYear(cardInfo);
+    }
+
+    @Test
+    @DisplayName("должна появиться строка-напоминание об ошибке при незаполнении поля CVC")
+    void shouldGetErrorWithDebitCardAndEmptyCVC() {
+        val choicePaymentPage = new ChoicePaymentPage();
+        choicePaymentPage.openChoicePaymentPage();
+        choicePaymentPage.openDebitPaymentPage();
+        val approvedCardInfo = DataHelper.approvedCardInfo();
+        val cardInfo = DataHelper.getValidCardInfo();
+        val debitPaymentPage = new DebitPaymentPage();
+        debitPaymentPage.checkEmptyCode(cardInfo);
+    }
+
 }
 

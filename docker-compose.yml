@@ -23,5 +23,3 @@ services:
     build: ./gate-simulator
     ports:
       - "9999:9999"
-    depends_on:
-      - mysql
