@@ -5,10 +5,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class PaymentTable {
+public class OrderEntity {
     private String id;
-    private String amount;
     private String created;
-    private String status;
-    private String transaction_id;
+    private String credit_id;
+    private String payment_id;
 }

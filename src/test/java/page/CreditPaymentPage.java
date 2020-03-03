@@ -45,17 +45,16 @@ public class CreditPaymentPage {
         continueButton.click();
     }
 
-    public void putValidDataApprovedCard(DataHelper.ValidCardInfo info) {
+    public void putValidDataApprovedCard(DataHelper.CardInfo info) {
         putCardData(DataHelper.approvedCardInfo().getCardNumber(), info.getMonth(), info.getYear(),
                 info.getOwner(), info.getCvc());
         successfullNotification.waitUntil(Condition.visible, 35000);
     }
-    public void putValidDataDeclinedCard(DataHelper.ValidCardInfo info) {
+    public void putValidDataDeclinedCard(DataHelper.CardInfo info) {
         putCardData(DataHelper.declinedCardInfo().getCardNumber(), info.getMonth(), info.getYear(),
                 info.getOwner(), info.getCvc());
         errorNotification.waitUntil(Condition.visible, 35000);
     }
-
 
     public void checkAllInvalidData() {
         putCardData("123", "0", "0", " ", "7");
@@ -66,15 +65,10 @@ public class CreditPaymentPage {
         ownerErrorText.shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
 
-    public void validVerify() {
-        successfullNotification.waitUntil(Condition.visible, 35000);
-    }
-
-    public void errorVerify() {
+    public void checkUnrealCardNumber(DataHelper.CardInfo info) {
+        putCardData(info.getUnrealCardNum(), info.getMonth(), info.getYear(), info.getOwner(), info.getCvc());
         errorNotification.waitUntil(Condition.visible, 35000);
     }
 
 }
-
-
 

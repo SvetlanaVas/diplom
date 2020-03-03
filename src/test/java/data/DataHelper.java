@@ -1,6 +1,5 @@
 package data;
 import com.github.javafaker.Faker;
-import lombok.Getter;
 import lombok.Value;
 
 import java.time.LocalDate;
@@ -34,75 +33,60 @@ public class DataHelper {
 
 
     @Value
-    public static class InvalidCardInfo {
+    public static class CardInfo {
+        private String month;
+        private String year;
+        private String cvc;
+        private String owner;
         private String pastMonth;
         private String pastYear;
         private String futureYear;
         private String ownerNameRus;
-        //final String unrealCardNum = "5555555555555555";
-        //final String symbolOwnerName = "ghj$$$uytr";
-        //final String cvcCode = "000";
-
-
-        public static InvalidCardInfo getInvalidCardInfo() {
-            LocalDate today = LocalDate.now();
-            String pastMonth = String.format("%tm", today.minusMonths(1));
-            String pastYear = String.format("%ty", today.minusYears(1));
-            String futureYear = String.format("%ty", today.plusYears(10));
-            String ownerNameRus = getRussianOwnerName();
-
-            return new InvalidCardInfo(pastMonth, pastYear, futureYear, ownerNameRus);
-        }
-
+        final String unrealCardNum = "5555555555555555";
+        final String symbolOwnerName = "ghj$$$uytr";
+        final String cvcCode = "000";
     }
-        @Value
-        public static class ValidCardInfo {
-            private String month;
-            private String year;
-            private String cvc;
-            private String owner;
-        }
 
+    public static CardInfo getCardInfo() {
+        LocalDate today = LocalDate.now();
+        String month = String.format("%tm", today.plusMonths(2));
+        String year = getRandomYear();
+        String cvc = getRandomCVC();
+        String owner = transliterate(getRussianOwnerName());
+        String pastMonth = String.format("%tm", today.minusMonths(1));
+        String pastYear = String.format("%ty", today.minusYears(1));
+        String futureYear = String.format("%ty", today.plusYears(10));
+        final String unrealCardNum = "5555555555555555";
+        String ownerNameRus = getRussianOwnerName();
 
-        public static ValidCardInfo getValidCardInfo() {
-            LocalDate today = LocalDate.now();
-            String month = String.format("%tm", today.plusMonths(2));
-            String year = getRandomYear();
-            String cvc = getRandomCVC();
-            String owner = transliterate(getRussianOwnerName());
+        return new CardInfo(month, year, cvc, owner, pastMonth, pastYear, futureYear, ownerNameRus);
+    }
 
-            return new ValidCardInfo(month, year, cvc, owner);
-        }
+    public static String getRandomYear() {
+        String[] years = {"20", "21", "22"};
+        Random random = new Random();
+        int index = random.nextInt(years.length);
+        return (years[index]);
+    }
 
-
-
-        public static String getRandomYear() {
-            String[] years = {"20", "21", "22"};
-            Random random = new Random();
-            int index = random.nextInt(years.length);
-            return (years[index]);
-        }
-
-        public static String getRandomCVC() {
-            int cvc = 100 + (int) (Math.random() * 899);
-            return (Integer.toString(cvc));
-        }
+    public static String getRandomCVC() {
+        int cvc = 100 + (int) (Math.random() * 899);
+        return (Integer.toString(cvc));
+    }
 
 
 
-        public static String transliterate(String ownerRussian) {
-            char[] abcCyr = {' ', 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-            String[] abcLat = {" ", "a", "b", "v", "g", "d", "e", "e", "zh", "z", "i", "y", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "f", "h", "ts", "ch", "sh", "sch", "", "i", "", "e", "ju", "ja", "A", "B", "V", "G", "D", "E", "E", "Zh", "Z", "I", "Y", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "F", "H", "Ts", "Ch", "Sh", "Sch", "", "I", "", "E", "Ju", "Ja", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < ownerRussian.length(); i++) {
-                for (int x = 0; x < abcCyr.length; x++) {
-                    if (ownerRussian.charAt(i) == abcCyr[x]) {
-                        builder.append(abcLat[x]);
-                    }
+    public static String transliterate(String ownerRussian) {
+        char[] abcCyr = {' ', 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        String[] abcLat = {" ", "a", "b", "v", "g", "d", "e", "e", "zh", "z", "i", "y", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "f", "h", "ts", "ch", "sh", "sch", "", "i", "", "e", "ju", "ja", "A", "B", "V", "G", "D", "E", "E", "Zh", "Z", "I", "Y", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "F", "H", "Ts", "Ch", "Sh", "Sch", "", "I", "", "E", "Ju", "Ja", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < ownerRussian.length(); i++) {
+            for (int x = 0; x < abcCyr.length; x++) {
+                if (ownerRussian.charAt(i) == abcCyr[x]) {
+                    builder.append(abcLat[x]);
                 }
             }
-            return builder.toString();
         }
+        return builder.toString();
     }
-
-
+}
