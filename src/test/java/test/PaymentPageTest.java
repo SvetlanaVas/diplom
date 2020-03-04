@@ -4,7 +4,7 @@ import data.DataHelper;
 import io.qameta.allure.selenide.AllureSelenide;
 import lombok.val;
 import org.junit.jupiter.api.*;
-import data.AppProp;
+//import data.AppProp;
 import data.DataHelper.*;
 import page.DebitPaymentPage;
 import page.CreditPaymentPage;
@@ -25,13 +25,13 @@ public class PaymentPageTest {
     //static AppProp props;
 
 
-    //@AfterAll
-    //@DisplayName("Чистит базу данных после всех тестов")
-    //void cleanBase() throws SQLException {
-    //    SQLutils.cleanDB();
-    //}
+    @BeforeEach
+    @DisplayName("Чистит базу данных перед каждым тестом")
+    void cleanBase() throws SQLException {
+       SQLutils.cleanDB();
+    }
 
-    @BeforeAll
+    /*@BeforeAll
     static void setupAll() {
         //SelenideLogger.addListener("allure", new AllureSelenide());
         cardInfo = DataHelper.getCardInfo();
@@ -109,7 +109,7 @@ public class PaymentPageTest {
     @DisplayName("должна появиться строка-напоминание об ошибке при заполнения поля Владелец кириллицей при Approved дебетовой карте")
     void shouldGetErrorWithDebitCardAndInvalidOwner() {
         val debitPaymentPage = getDebitPaymentPage();
-        debitPaymentPage.checkRussianOwnerName(DataHelper.getRussianOwnerName(),cardInfo);
+        debitPaymentPage.checkRussianOwnerName(cardInfo.getOwnerNameRus(),cardInfo);
     }
 
     @Test

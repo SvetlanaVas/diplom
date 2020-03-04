@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-@Data
+/*@Data
 @AllArgsConstructor
 public class AppProp {
 
@@ -32,4 +32,4 @@ public class AppProp {
                 prop.getProperty("spring.credit-gate.url"),
                 prop.getProperty("spring.payment-gate.url"));
     }
-}
+}*/
