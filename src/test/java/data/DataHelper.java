@@ -1,5 +1,6 @@
 package data;
 import com.github.javafaker.Faker;
+import lombok.Getter;
 import lombok.Value;
 
 import java.time.LocalDate;
@@ -29,6 +30,18 @@ public class DataHelper {
     public static CardNumber declinedCardInfo() {
 
         return new CardNumber("4444 4444 4444 4442", "DECLINED");
+    }
+
+    @Getter
+    public static class ApprovedCard {
+        final String number = "4444 4444 4444 4441";
+        final String status = "APPROVED";
+    }
+
+    @Getter
+    public static class DeclinedCard {
+        final String number = "4444 4444 4444 4442";
+        final String status = "DECLINED";
     }
 
 

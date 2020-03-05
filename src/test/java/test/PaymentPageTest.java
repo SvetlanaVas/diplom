@@ -4,7 +4,6 @@ import data.DataHelper;
 import io.qameta.allure.selenide.AllureSelenide;
 import lombok.val;
 import org.junit.jupiter.api.*;
-//import data.AppProp;
 import data.DataHelper.*;
 import page.DebitPaymentPage;
 import page.CreditPaymentPage;
@@ -12,17 +11,18 @@ import page.ChoicePaymentPage;
 import sqlUtils.SQLutils;
 
 
+import java.util.Properties;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static sqlUtils.SQLutils.*;
+
 
 
 
 
 public class PaymentPageTest {
     static CardInfo cardInfo;
-    //static AppProp props;
 
 
     @BeforeEach
@@ -30,18 +30,17 @@ public class PaymentPageTest {
     void cleanBase() throws SQLException {
        SQLutils.cleanDB();
     }
-
-    /*@BeforeAll
-    static void setupAll() {
-        //SelenideLogger.addListener("allure", new AllureSelenide());
+    @BeforeAll
+    static void setupAll() throws SQLException {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+        SQLutils.getConnection();
         cardInfo = DataHelper.getCardInfo();
-        //props = AppProp.getAppProp();
-    }
 
-    /*@AfterAll
+    }
+    @AfterAll
     static void tearDownAll() {
         SelenideLogger.removeListener("allure");
-    }*/
+    }
 
    static DebitPaymentPage getDebitPaymentPage () {
        val choicePaymentPage = new ChoicePaymentPage();
@@ -56,13 +55,14 @@ public class PaymentPageTest {
         choicePaymentPage.openCreditPaymentPage();
         return new CreditPaymentPage();
     }
+
+
     //Happy Tests
     @Test
     @DisplayName("должен быть успешно куплен тур  Approved дебетовой картой  при заполнении заявки валидными данными")
     void shouldBuyTourWithDebitApprovedCardAndValidData() {
-       val debitPaymentPage = getDebitPaymentPage();
+        val debitPaymentPage = getDebitPaymentPage();
        debitPaymentPage.putValidDataApprovedCard(cardInfo);
-
     }
 
     //Bug
@@ -71,15 +71,13 @@ public class PaymentPageTest {
     void shouldGetErrorWithDebitDeclinedCardAndValidData() {
         val debitPaymentPage = getDebitPaymentPage();
         debitPaymentPage.putValidDataDeclinedCard(cardInfo);
-
     }
 
-    @Test
+   @Test
     @DisplayName("должен быть успешно куплен тур Approved кредитной картой при заполнении заявки валидными данными")
     void shouldBuyTourWithCreditApprovedCardAndValidData() {
         val creditPaymentPage = getCreditPaymentPage();
         creditPaymentPage.putValidDataApprovedCard(cardInfo);
-
     }
     //Bug
     @Test
@@ -97,7 +95,7 @@ public class PaymentPageTest {
         debitPaymentPage.checkAllInvalidData();
     }
 
-    @Test
+   @Test
     @DisplayName("должна показаться строка-напоминание об ошибке при заполнении всех полей невалидными значениями и кредитной карте")
     void shouldGetErrorWithCreditCardAndAllInvalidData() {
         val creditPaymentPage = getCreditPaymentPage();
@@ -118,30 +116,35 @@ public class PaymentPageTest {
         val debitPaymentPage = getDebitPaymentPage();
         debitPaymentPage.checkPastMonth(cardInfo.getPastMonth(),cardInfo);
     }
+
     @Test
     @DisplayName("должна появиться строка-напоминание об ошибке при незаполнении поля Месяц")
     void shouldGetErrorWithDebitApprovedCardAndEmptyMonth() {
         val debitPaymentPage = getDebitPaymentPage();
         debitPaymentPage.checkEmptyMonth(cardInfo);
     }
+
     @Test
     @DisplayName("должна появиться строка-напоминание об ошибке при незаполнении поля Номер карты")
     void shouldGetErrorWithDebitCardAndEmptyCard() {
         val debitPaymentPage = getDebitPaymentPage();
         debitPaymentPage.checkEmptyNumber(cardInfo);
     }
+
     @Test
     @DisplayName("должна появиться строка-напоминание о необходимости заполнения поля Владелец")
     void shouldGetErrorWithDebitCardAndEmptyOwner() {
         val debitPaymentPage = getDebitPaymentPage();
         debitPaymentPage.checkEmptyOwner(cardInfo);
     }
+
     @Test
     @DisplayName("должна появиться строка-напоминание об ошибке при заполнения поля Год значением на 10 лет больше текущего года")
     void shouldGetErrorWithDebitCardAndFutureYear() {
         val debitPaymentPage = getDebitPaymentPage();
         debitPaymentPage.checkFutureYear(cardInfo.getFutureYear(),cardInfo);
     }
+
     @Test
     @DisplayName("должна появиться строка-напоминание об ошибке при незаполнении поля Год")
     void shouldGetErrorWithDebitCardAndInvalidMonth() {
