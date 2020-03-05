@@ -14,7 +14,10 @@ import sqlUtils.SQLutils;
 import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static sqlUtils.SQLutils.*;
+
 import java.sql.SQLException;
+
 
 
 
@@ -59,32 +62,67 @@ public class PaymentPageTest {
 
     //Happy Tests
     @Test
-    @DisplayName("должен быть успешно куплен тур  Approved дебетовой картой  при заполнении заявки валидными данными")
-    void shouldBuyTourWithDebitApprovedCardAndValidData() {
+    @DisplayName("должен быть успешно куплен тур  Approved дебетовой картой  при заполнении заявки валидными данными, в соответствующих таблицах БД появляются записи")
+    void shouldBuyTourWithDebitApprovedCardAndValidData() throws SQLException{
         val debitPaymentPage = getDebitPaymentPage();
        debitPaymentPage.putValidDataApprovedCard(cardInfo);
+        val paymentEntityId = getPaymentEntityId(DataHelper.approvedCardInfo().getStatus());
+        assertNotEquals("", paymentEntityId);
+        val orderId = getOrderEntityId(paymentEntityId);
+        assertNotEquals("", orderId);
     }
 
     //Bug
     @Test
     @DisplayName("должен быть отказ в проведении операции с Declined дебетовой картой при заполнении заявки валидными данными")
-    void shouldGetErrorWithDebitDeclinedCardAndValidData() {
+    void shouldGetErrorWithDebitDeclinedCardAndValidData() throws SQLException{
         val debitPaymentPage = getDebitPaymentPage();
         debitPaymentPage.putValidDataDeclinedCard(cardInfo);
+        val paymentEntityId = getPaymentEntityId(DataHelper.declinedCardInfo().getStatus());
+        assertNotEquals("", paymentEntityId);
+        val orderId = getOrderEntityId(paymentEntityId);
+        assertNotEquals("", orderId);
     }
 
    @Test
-    @DisplayName("должен быть успешно куплен тур Approved кредитной картой при заполнении заявки валидными данными")
-    void shouldBuyTourWithCreditApprovedCardAndValidData() {
+    @DisplayName("должен быть успешно куплен тур Approved кредитной картой при заполнении заявки валидными данными, в соответствующих таблицах БД появляются записи")
+    void shouldBuyTourWithCreditApprovedCardAndValidData() throws SQLException {
         val creditPaymentPage = getCreditPaymentPage();
         creditPaymentPage.putValidDataApprovedCard(cardInfo);
+       val creditRequestEntityId = getCreditRequestEntityId(DataHelper.approvedCardInfo().getStatus());
+       assertNotEquals("", creditRequestEntityId);
+       val orderId = getOrderEntityId(creditRequestEntityId);
+       assertNotEquals("", orderId);
     }
     //Bug
     @Test
     @DisplayName("должен быть отказ в проведении операции с Declined кредитной картой при заполнении заявки валидными данными")
-    void  shouldGetErrorWithCreditDeclinedCardAndValidData(){
+    void  shouldGetErrorWithCreditDeclinedCardAndValidData() throws SQLException {
         val creditPaymentPage = getCreditPaymentPage();
         creditPaymentPage.putValidDataDeclinedCard(cardInfo);
+        val creditRequestEntityId = getCreditRequestEntityId(DataHelper.declinedCardInfo().getStatus());
+        assertNotEquals("", creditRequestEntityId);
+        val orderId = getOrderEntityId(creditRequestEntityId);
+        assertNotEquals("", orderId);
+    }
+
+    @Test
+    @DisplayName("должен быть получен ответ Approved от эмулятора банковского сервиса, если статус дебетовой карты Approved")
+    void shouldGetResponseApprovedIfApprovedDebitCard() throws SQLException{
+        val debitPaymentPage = getDebitPaymentPage();
+        debitPaymentPage.putValidDataApprovedCard(cardInfo);
+        val actual = DataHelper.approvedCardInfo().getStatus();
+        val expected = getDebitCardStatus();
+        assertEquals(expected, actual);
+    }
+    @Test
+    @DisplayName("должен быть получен ответ Approved от эмулятора банковского сервиса, если статус кредитной карты Approved")
+    void shouldGetResponseApprovedIfApprovedCreditCard() throws SQLException{
+        val creditPaymentPage = getCreditPaymentPage();
+        creditPaymentPage.putValidDataApprovedCard(cardInfo);
+        val actual = DataHelper.approvedCardInfo().getStatus();
+        val expected = getCreditCardStatus();
+        assertEquals(expected, actual);
     }
 
     //Sad Tests

@@ -42,7 +42,7 @@ public class SQLutils {
     }
 
     public static String getCreditCardStatus() throws SQLException {
-        val selectStatus = "SELECT * FROM credit_request_entity ORDER BY status created DESC LIMIT 1";
+        val selectStatus = "SELECT * FROM credit_request_entity ORDER BY status";
         val runner = new QueryRunner();
             val creditCardStatus = runner.query(getConnection(), selectStatus, new BeanHandler<>(CreditRequestEntity.class));
             return creditCardStatus.getStatus();
@@ -50,7 +50,7 @@ public class SQLutils {
     }
 
     public static String getDebitCardStatus() throws SQLException {
-        val selectStatus = "SELECT * FROM payment_entity ORDER BY status created DESC LIMIT 1";
+        val selectStatus = "SELECT * FROM payment_entity ORDER BY status";
         val runner = new QueryRunner();
             val debitCardStatus = runner.query(getConnection(), selectStatus, new BeanHandler<>(CreditRequestEntity.class));
             return debitCardStatus.getStatus();
