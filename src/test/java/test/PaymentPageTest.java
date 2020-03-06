@@ -78,10 +78,11 @@ public class PaymentPageTest {
     void shouldGetErrorWithDebitDeclinedCardAndValidData() throws SQLException{
         val debitPaymentPage = getDebitPaymentPage();
         debitPaymentPage.putValidDataDeclinedCard(cardInfo);
-        val paymentEntityId = getPaymentEntityId(DataHelper.declinedCardInfo().getStatus());
+        //если бы тест не упал, то далее были бы осуществлены проверки на появление записи в transaction_id таблицы payment_entity и в поле payment_id таблицы order_entity
+        /*val paymentEntityId = getPaymentEntityId(DataHelper.declinedCardInfo().getStatus());
         assertNotEquals("", paymentEntityId);
         val orderId = getOrderEntityId(paymentEntityId);
-        assertNotEquals("", orderId);
+        assertNotEquals("", orderId);*/
     }
 
    @Test
@@ -100,10 +101,11 @@ public class PaymentPageTest {
     void  shouldGetErrorWithCreditDeclinedCardAndValidData() throws SQLException {
         val creditPaymentPage = getCreditPaymentPage();
         creditPaymentPage.putValidDataDeclinedCard(cardInfo);
-        val creditRequestEntityId = getCreditRequestEntityId(DataHelper.declinedCardInfo().getStatus());
+        //если бы тест не упал, то далее были бы осуществлены проверки на появление записи в поле bank_id таблицы credit_request_entity и в поле payment_id таблицы order_entity
+        /*val creditRequestEntityId = getCreditRequestEntityId(DataHelper.declinedCardInfo().getStatus());
         assertNotEquals("", creditRequestEntityId);
         val orderId = getOrderEntityId(creditRequestEntityId);
-        assertNotEquals("", orderId);
+        assertNotEquals("", orderId);*/
     }
 
     @Test
@@ -121,6 +123,15 @@ public class PaymentPageTest {
         val creditPaymentPage = getCreditPaymentPage();
         creditPaymentPage.putValidDataApprovedCard(cardInfo);
         val actual = DataHelper.approvedCardInfo().getStatus();
+        val expected = getCreditCardStatus();
+        assertEquals(expected, actual);
+    }
+    @Test
+    @DisplayName("должен быть получен ответ Declined от эмулятора банковского сервиса, если статус кредитной карты Declined")
+    void shouldGetResponseDeclinedIfDeclinedCreditCard() throws SQLException{
+        val creditPaymentPage = getCreditPaymentPage();
+        creditPaymentPage.putValidDataDeclinedCard1(cardInfo);
+        val actual = DataHelper.declinedCardInfo().getStatus();
         val expected = getCreditCardStatus();
         assertEquals(expected, actual);
     }
