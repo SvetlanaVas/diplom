@@ -20,10 +20,6 @@ import java.sql.SQLException;
 
 
 
-
-
-
-
 public class PaymentPageTest {
     static CardInfo cardInfo;
 
@@ -31,8 +27,9 @@ public class PaymentPageTest {
     @BeforeEach
     @DisplayName("Чистит базу данных перед каждым тестом")
     void cleanBase() throws SQLException {
-       SQLutils.cleanDB();
+        SQLutils.cleanDB();
     }
+
     @BeforeAll
     static void setupAll() throws SQLException {
         SelenideLogger.addListener("allure", new AllureSelenide());
@@ -40,19 +37,20 @@ public class PaymentPageTest {
         cardInfo = DataHelper.getCardInfo();
 
     }
+
     @AfterAll
     static void tearDownAll() {
         SelenideLogger.removeListener("allure");
     }
 
-   static DebitPaymentPage getDebitPaymentPage () {
-       val choicePaymentPage = new ChoicePaymentPage();
-       choicePaymentPage.openChoicePaymentPage();
-       choicePaymentPage.openDebitPaymentPage();
-       return new DebitPaymentPage();
-   }
+    static DebitPaymentPage getDebitPaymentPage() {
+        val choicePaymentPage = new ChoicePaymentPage();
+        choicePaymentPage.openChoicePaymentPage();
+        choicePaymentPage.openDebitPaymentPage();
+        return new DebitPaymentPage();
+    }
 
-    static CreditPaymentPage getCreditPaymentPage () {
+    static CreditPaymentPage getCreditPaymentPage() {
         val choicePaymentPage = new ChoicePaymentPage();
         choicePaymentPage.openChoicePaymentPage();
         choicePaymentPage.openCreditPaymentPage();
@@ -63,9 +61,9 @@ public class PaymentPageTest {
     //Happy Tests
     @Test
     @DisplayName("должен быть успешно куплен тур  Approved дебетовой картой  при заполнении заявки валидными данными, в соответствующих таблицах БД появляются записи")
-    void shouldBuyTourWithDebitApprovedCardAndValidData() throws SQLException{
+    void shouldBuyTourWithDebitApprovedCardAndValidData() throws SQLException {
         val debitPaymentPage = getDebitPaymentPage();
-       debitPaymentPage.putValidDataApprovedCard(cardInfo);
+        debitPaymentPage.putValidDataApprovedCard(cardInfo);
         val paymentEntityId = getPaymentEntityId(DataHelper.approvedCardInfo().getStatus());
         assertNotEquals("", paymentEntityId);
         val orderId = getOrderEntityId(paymentEntityId);
@@ -75,7 +73,7 @@ public class PaymentPageTest {
     //Bug
     @Test
     @DisplayName("должен быть отказ в проведении операции с Declined дебетовой картой при заполнении заявки валидными данными")
-    void shouldGetErrorWithDebitDeclinedCardAndValidData() throws SQLException{
+    void shouldGetErrorWithDebitDeclinedCardAndValidData() throws SQLException {
         val debitPaymentPage = getDebitPaymentPage();
         debitPaymentPage.putValidDataDeclinedCard(cardInfo);
         //если бы тест не упал, то далее были бы осуществлены проверки на появление записи в transaction_id таблицы payment_entity и в поле payment_id таблицы order_entity
@@ -85,20 +83,21 @@ public class PaymentPageTest {
         assertNotEquals("", orderId);*/
     }
 
-   @Test
+    @Test
     @DisplayName("должен быть успешно куплен тур Approved кредитной картой при заполнении заявки валидными данными, в соответствующих таблицах БД появляются записи")
     void shouldBuyTourWithCreditApprovedCardAndValidData() throws SQLException {
         val creditPaymentPage = getCreditPaymentPage();
         creditPaymentPage.putValidDataApprovedCard(cardInfo);
-       val creditRequestEntityId = getCreditRequestEntityId(DataHelper.approvedCardInfo().getStatus());
-       assertNotEquals("", creditRequestEntityId);
-       val orderId = getOrderEntityId(creditRequestEntityId);
-       assertNotEquals("", orderId);
+        val creditRequestEntityId = getCreditRequestEntityId(DataHelper.approvedCardInfo().getStatus());
+        assertNotEquals("", creditRequestEntityId);
+        val orderId = getOrderEntityId(creditRequestEntityId);
+        assertNotEquals("", orderId);
     }
+
     //Bug
     @Test
     @DisplayName("должен быть отказ в проведении операции с Declined кредитной картой при заполнении заявки валидными данными")
-    void  shouldGetErrorWithCreditDeclinedCardAndValidData() throws SQLException {
+    void shouldGetErrorWithCreditDeclinedCardAndValidData() throws SQLException {
         val creditPaymentPage = getCreditPaymentPage();
         creditPaymentPage.putValidDataDeclinedCard(cardInfo);
         //если бы тест не упал, то далее были бы осуществлены проверки на появление записи в поле bank_id таблицы credit_request_entity и в поле payment_id таблицы order_entity
@@ -110,25 +109,27 @@ public class PaymentPageTest {
 
     @Test
     @DisplayName("должен быть получен ответ Approved от эмулятора банковского сервиса, если статус дебетовой карты Approved")
-    void shouldGetResponseApprovedIfApprovedDebitCard() throws SQLException{
+    void shouldGetResponseApprovedIfApprovedDebitCard() throws SQLException {
         val debitPaymentPage = getDebitPaymentPage();
         debitPaymentPage.putValidDataApprovedCard(cardInfo);
         val actual = DataHelper.approvedCardInfo().getStatus();
         val expected = getDebitCardStatus();
         assertEquals(expected, actual);
     }
+
     @Test
     @DisplayName("должен быть получен ответ Approved от эмулятора банковского сервиса, если статус кредитной карты Approved")
-    void shouldGetResponseApprovedIfApprovedCreditCard() throws SQLException{
+    void shouldGetResponseApprovedIfApprovedCreditCard() throws SQLException {
         val creditPaymentPage = getCreditPaymentPage();
         creditPaymentPage.putValidDataApprovedCard(cardInfo);
         val actual = DataHelper.approvedCardInfo().getStatus();
         val expected = getCreditCardStatus();
         assertEquals(expected, actual);
     }
+
     @Test
     @DisplayName("должен быть получен ответ Declined от эмулятора банковского сервиса, если статус кредитной карты Declined")
-    void shouldGetResponseDeclinedIfDeclinedCreditCard() throws SQLException{
+    void shouldGetResponseDeclinedIfDeclinedCreditCard() throws SQLException {
         val creditPaymentPage = getCreditPaymentPage();
         creditPaymentPage.putValidDataDeclinedCard1(cardInfo);
         val actual = DataHelper.declinedCardInfo().getStatus();
@@ -144,7 +145,7 @@ public class PaymentPageTest {
         debitPaymentPage.checkAllInvalidData();
     }
 
-   @Test
+    @Test
     @DisplayName("должна показаться строка-напоминание об ошибке при заполнении всех полей невалидными значениями и кредитной карте")
     void shouldGetErrorWithCreditCardAndAllInvalidData() {
         val creditPaymentPage = getCreditPaymentPage();
@@ -154,16 +155,24 @@ public class PaymentPageTest {
     //Bug
     @Test
     @DisplayName("должна появиться строка-напоминание об ошибке при заполнения поля Владелец кириллицей при Approved дебетовой карте")
-    void shouldGetErrorWithDebitCardAndInvalidOwner() {
+    void shouldGetErrorWithDebitCardAndRusNameOwner() {
         val debitPaymentPage = getDebitPaymentPage();
-        debitPaymentPage.checkRussianOwnerName(cardInfo.getOwnerNameRus(),cardInfo);
+        debitPaymentPage.checkRussianOwnerName(cardInfo.getOwnerNameRus(), cardInfo);
+    }
+
+    //Bug
+    @Test
+    @DisplayName("должна появиться строка-напоминание об ошибке при заполнения поля Владелец кириллицей при Approved кредитной карте")
+    void shouldGetErrorWithCreditCardAndRusNameOwner() {
+        val creditPaymentPage = getCreditPaymentPage();
+        creditPaymentPage.checkRussianOwnerName(cardInfo.getOwnerNameRus(), cardInfo);
     }
 
     @Test
     @DisplayName("должна появиться строка-напоминание об ошибке при заполнения поля Месяц значением предыдущего месяца текущего года")
     void shouldGetErrorWithDebitCardAndPastMonth() {
         val debitPaymentPage = getDebitPaymentPage();
-        debitPaymentPage.checkPastMonth(cardInfo.getPastMonth(),cardInfo);
+        debitPaymentPage.checkPastMonth(cardInfo.getPastMonth(), cardInfo);
     }
 
     @Test
@@ -191,7 +200,7 @@ public class PaymentPageTest {
     @DisplayName("должна появиться строка-напоминание об ошибке при заполнения поля Год значением на 10 лет больше текущего года")
     void shouldGetErrorWithDebitCardAndFutureYear() {
         val debitPaymentPage = getDebitPaymentPage();
-        debitPaymentPage.checkFutureYear(cardInfo.getFutureYear(),cardInfo);
+        debitPaymentPage.checkFutureYear(cardInfo.getFutureYear(), cardInfo);
     }
 
     @Test
@@ -210,8 +219,8 @@ public class PaymentPageTest {
 
     @Test
     @DisplayName("должна появиться сообщение об ошибке и отклонении операции при заполнении поля Номер карты несуществующим значением")
-    void shouldGetErrorWithCreditCardAndUnrealCard(){
-       val creditPaymentPage = getCreditPaymentPage();
-       creditPaymentPage.checkUnrealCardNumber(cardInfo);
+    void shouldGetErrorWithCreditCardAndUnrealCard() {
+        val creditPaymentPage = getCreditPaymentPage();
+        creditPaymentPage.checkUnrealCardNumber(cardInfo);
     }
 }

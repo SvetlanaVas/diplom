@@ -7,11 +7,26 @@
 
 **Действия, необходимые для запуска Приложения** и его тестирования:
 
-1. Запуск Docker
-1. Загрузка контейнеров с mysql и postgres 
-1. Запуск платежного шлюза 
-1. Запуск SUT 
-1. Запуск автотестов 
+**1.** Запуск Docker
+
+**2.** В терминале IDEA загрузить контейнеры mysql, postgres и образ платежного шлюза nodejs в терминале IDEA командой  
+   docker-compose up
+   
+**3.** Во втором терминале из директории artifacts запустить SUT командой:
+ * для конфигурации с базой MySql 
+ 
+java -Dspring.datasource.url=jdbc:mysql://localhost/app -jar aqa-shop.jar
+ * для конфигурации с базой PostgreSql
+ 
+ java -Dspring.datasource.url=jdbc:postgresql://localhost:5432/app -jar aqa-shop.jar
+ 
+**4.** В браузере SUT открывается: localhost:8080
+
+**5.** Запуск автотестов командой:
+* для конфигурации с MySql
+gradlew test -Ddb.url=jdbc:mysql://localhost:3306/app  
+* для конфигурации с PostgreSql
+gradlew test -Ddb.url=jdbc:postgresql://localhost:5432/app
 
 
 ### 1. Перечень автоматизируемых сценариев
