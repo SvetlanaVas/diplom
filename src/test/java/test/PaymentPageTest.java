@@ -9,8 +9,6 @@ import page.DebitPaymentPage;
 import page.CreditPaymentPage;
 import page.ChoicePaymentPage;
 import sqlUtils.SQLutils;
-
-
 import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -127,8 +125,9 @@ public class PaymentPageTest {
         assertEquals(expected, actual);
     }
 
+    //моделируем ситуацию прохождения теста shouldGetErrorWithCreditDeclinedCardAndValidData и проверяем запись в поле status
     @Test
-    @DisplayName("должен быть получен ответ Declined от эмулятора банковского сервиса, если статус кредитной карты Declined")
+    @DisplayName("в поле status таблицы credit_request_entity должно появиться  Declined, если статус кредитной карты Declined")
     void shouldGetResponseDeclinedIfDeclinedCreditCard() throws SQLException {
         val creditPaymentPage = getCreditPaymentPage();
         creditPaymentPage.putValidDataDeclinedCard1(cardInfo);

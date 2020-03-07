@@ -15,7 +15,7 @@
 **3.** Во втором терминале из директории artifacts запустить SUT командой:
  * для конфигурации с базой MySql 
  
-java -Dspring.datasource.url=jdbc:mysql://localhost/app -jar aqa-shop.jar
+java -jar aqa-shop.jar
  * для конфигурации с базой PostgreSql
  
  java -Dspring.datasource.url=jdbc:postgresql://localhost:5432/app -jar aqa-shop.jar
@@ -24,9 +24,9 @@ java -Dspring.datasource.url=jdbc:mysql://localhost/app -jar aqa-shop.jar
 
 **5.** Запуск автотестов командой:
 * для конфигурации с MySql
-gradlew test -Ddb.url=jdbc:mysql://localhost:3306/app  
+gradlew test 
 * для конфигурации с PostgreSql
-gradlew test -Ddb.url=jdbc:postgresql://localhost:5432/app
+gradlew test -Dspring.datasource.url=jdbc:postgresql://localhost:5432/app
 
 
 ### 1. Перечень автоматизируемых сценариев
@@ -78,6 +78,7 @@ gradlew test -Ddb.url=jdbc:postgresql://localhost:5432/app
  **Ожидаемый результат:** появляется  сообщение "Ошибка! Банк отказал в проведении операции"
  
  **Фактический результат:** после нажатия кнопки "Продолжить" текст на ней поменялся на "Отправляем запрос в банк". По окончании появляется сообщение: "Успешно. Операция одобрена банком" Тест упал.
+ Если смоделировать ситуацию успешного прохождения теста (тест shouldGetResponseDeclinedIfDeclinedCreditCard), то в поле status таблицы credit_request_entity появится Declined.
 
 **5.** Отправить заявку с дебетовой картой со статусом Approved. Проверить ответ от эмулятора банковской системы.
 * Открыть в браузере  http://localhost:8080/
