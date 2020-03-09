@@ -7,24 +7,26 @@
 
 **1.** Запустить Docker
 
-**2.** В терминале IDEA загрузить контейнеры mysql, postgres и образ платежного шлюза nodejs в терминале IDEA командой  
+**2.** В терминале IDEA из директории diplom загрузить контейнеры mysql, postgres и образ платежного шлюза nodejs в терминале IDEA командой  
    **docker-compose up**
    
 **3.** Во втором терминале из директории artifacts запустить SUT командой:
  * для конфигурации с базой MySql 
  
-**java -jar aqa-shop.jar**
+**java -Dspring.datasource.url=jdbc:mysql://localhost:3306/app -jar aqa-shop.jar**
+
  * для конфигурации с базой PostgreSql
  
 **java -Dspring.datasource.url=jdbc:postgresql://localhost:5432/app -jar aqa-shop.jar**
  
 **4.** В браузере SUT открывается так: localhost:8080
 
-**5.** Запуск автотестов командой:
+**5.** Запустить автотесты из директории diplom командой:
 * для конфигурации с MySql
 
-**gradlew test**  
+**gradlew test -Ddb.url=jdbc:mysql://localhost:3306/app**
 * для конфигурации с PostgreSql
 
-**gradlew test -Dspring.datasource.url=jdbc:postgresql://localhost:5432/app**
+**-Ddb.url=jdbc:postgresql://localhost:5432/app**
+
 

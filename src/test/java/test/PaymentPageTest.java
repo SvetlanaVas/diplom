@@ -125,16 +125,6 @@ public class PaymentPageTest {
         assertEquals(expected, actual);
     }
 
-    //моделируем ситуацию прохождения теста shouldGetErrorWithCreditDeclinedCardAndValidData и проверяем запись в поле status
-    @Test
-    @DisplayName("в поле status таблицы credit_request_entity должно появиться  Declined, если статус кредитной карты Declined")
-    void shouldGetResponseDeclinedIfDeclinedCreditCard() throws SQLException {
-        val creditPaymentPage = getCreditPaymentPage();
-        creditPaymentPage.putValidDataDeclinedCard1(cardInfo);
-        val actual = DataHelper.declinedCardInfo().getStatus();
-        val expected = getCreditCardStatus();
-        assertEquals(expected, actual);
-    }
 
     //Sad Tests
     @Test

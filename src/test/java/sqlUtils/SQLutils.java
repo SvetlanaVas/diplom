@@ -11,7 +11,7 @@ public class SQLutils {
 
     public static Connection getConnection() throws SQLException {
         try {
-            String url = System.getProperty("spring.datasource.url");
+            String url = System.getProperty("db.url");
             String username = "app";
             String password = "pass";
             Connection conn = null;

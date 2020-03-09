@@ -62,11 +62,6 @@ public class CreditPaymentPage {
         ownerErrorText.shouldHave(Condition.exactText("Неверный формат"));
     }
 
-        public void putValidDataDeclinedCard1(DataHelper.CardInfo info) {
-        putCardData(DataHelper.declinedCardInfo().getCardNumber(), info.getMonth(), info.getYear(),
-                info.getOwner(), info.getCvc());
-        successfullNotification.waitUntil(Condition.visible, 35000);
-    }
 
     public void checkAllInvalidData() {
         putCardData("123", "0", "0", " ", "7");
