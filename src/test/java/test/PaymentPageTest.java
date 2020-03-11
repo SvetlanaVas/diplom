@@ -31,7 +31,6 @@ public class PaymentPageTest {
     @BeforeAll
     static void setupAll() throws SQLException {
         SelenideLogger.addListener("allure", new AllureSelenide());
-        SQLutils.getConnection();
         cardInfo = DataHelper.getCardInfo();
 
     }

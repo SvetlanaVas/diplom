@@ -1,6 +1,7 @@
 Thumbs.db*
 .DS_Store
 HELP.md
+.allure
 .gradle
 build/
 gate-simulator/node-modules/
