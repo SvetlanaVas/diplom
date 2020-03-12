@@ -52,11 +52,12 @@ public class DataHelper {
         private String cvc;
         private String owner;
         private String pastMonth;
+        private String todayYear;
         private String pastYear;
         private String futureYear;
         private String ownerNameRus;
         final String unrealCardNum = "5555555555555555";
-        final String symbolOwnerName = "ghj$$$uytr";
+        final String symbolOwnerName = "g4hj$$$uy&tr";
         final String cvcCode = "000";
     }
 
@@ -65,14 +66,15 @@ public class DataHelper {
         String month = String.format("%tm", today.plusMonths(2));
         String year = getRandomYear();
         String cvc = getRandomCVC();
-        String owner = transliterate(getRussianOwnerName());
+        String ownerNameRus = getRussianOwnerName();
+        String owner = transliterate(ownerNameRus);
         String pastMonth = String.format("%tm", today.minusMonths(1));
         String pastYear = String.format("%ty", today.minusYears(1));
+        String todayYear = String.format("%ty", today);
         String futureYear = String.format("%ty", today.plusYears(10));
-        final String unrealCardNum = "5555555555555555";
-        String ownerNameRus = getRussianOwnerName();
 
-        return new CardInfo(month, year, cvc, owner, pastMonth, pastYear, futureYear, ownerNameRus);
+
+        return new CardInfo(month, year, cvc, owner, pastMonth, todayYear, pastYear, futureYear, ownerNameRus);
     }
 
     public static String getRandomYear() {

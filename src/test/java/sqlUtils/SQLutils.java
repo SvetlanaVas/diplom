@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 public class SQLutils {
 
     /*public static Connection getConnection() throws SQLException {
@@ -35,9 +37,16 @@ public class SQLutils {
         String url = System.getProperty("db.url");
         String username = System.getProperty("db.login");
         String password = System.getProperty("db.password");
-        Connection conn = DriverManager.getConnection(url, username, password);
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url, username, password);
+            System.out.print("Connection success!");}
+        catch (SQLException e) {
+            System.out.print("Connection failed");
+        }
         return conn;
     }
+
 
 
        public static void cleanDB() throws SQLException {
@@ -96,6 +105,32 @@ public class SQLutils {
         try (val conn = getConnection()) {
             val orderBlock = runner.query(conn, orderEntity, new BeanHandler<>(OrderEntity.class));
             return orderBlock.getId();
+        }
+    }
+    public static void checkEmptyPaymentEntity() throws SQLException {
+        val paymentRequest = "SELECT * FROM payment_entity;";
+        val runner = new QueryRunner();
+        try (val conn = getConnection()) {
+            val paymentBlock = runner.query(conn, paymentRequest, new BeanHandler<>(PaymentEntity.class));
+            assertNull(paymentBlock);
+        }
+    }
+
+    public static void checkEmptyCreditEntity() throws SQLException {
+        val creditRequest = "SELECT * FROM credit_request_entity;";
+        val runner = new QueryRunner();
+        try (val conn = getConnection()) {
+            val creditRequestBlock = runner.query(conn, creditRequest, new BeanHandler<>(CreditRequestEntity.class));
+            assertNull(creditRequestBlock);
+        }
+    }
+
+    public static void checkEmptyOrderEntity() throws SQLException {
+        val orderRequest = "SELECT * FROM order_entity;";
+        val runner = new QueryRunner();
+        try (val conn = getConnection()) {
+            val orderBlock = runner.query(conn, orderRequest, new BeanHandler<>(OrderEntity.class));
+            assertNull(orderBlock);
         }
     }
 }
