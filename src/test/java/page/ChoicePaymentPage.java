@@ -11,7 +11,9 @@ public class ChoicePaymentPage {
 
 
     public void openChoicePaymentPage() {
-        open("http://localhost:8080");
+        //open("http://localhost:8080");
+        String suturl = System.getProperty("sut.url");
+        open(suturl);
     }
 
 

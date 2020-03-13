@@ -67,7 +67,7 @@ public class Metods {
     }
 
     public void checkPastMonth(DataHelper.CardInfo info) {
-        putCardData(DataHelper.approvedCardInfo().getCardNumber(), info.getPastMonth(), info.getYear(), info.getOwner(), info.getCvc());
+        putCardData(DataHelper.approvedCardInfo().getCardNumber(), info.getPastMonth(), info.getTodayYear(), info.getOwner(), info.getCvc());
         invalidCardPeriodError.shouldBe(Condition.visible);
     }
 
