@@ -33,3 +33,10 @@
 
 **gradlew test -Ddb.url=jdbc:postgresql://localhost:5432/app**
 
+
+Отчеты по результатам тестирования:
+
+[Allure](https://github.com/SvetlanaVas/diplom/issues/7)
+
+[Gradle](https://github.com/SvetlanaVas/diplom/issues/6)
+
