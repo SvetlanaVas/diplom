@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class Metods {
+public class PaymentForm {
     private SelenideElement headingCredit = $$(".heading").find(Condition.exactText("Кредит по данным карты"));
     private SelenideElement cardNumberField = $("[placeholder='0000 0000 0000 0000']");
     private SelenideElement monthInputField = $("[placeholder='08']");
@@ -24,7 +24,6 @@ public class Metods {
     private SelenideElement mustBeFieldError = $(byText("Поле обязательно для заполнения"));
     private SelenideElement cardPeriodError = $(byText("Истёк срок действия карты"));
     private SelenideElement invalidCardPeriodError = $(byText("Неверно указан срок действия карты"));
-    private SelenideElement ownerErrorText = $("div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__sub");
 
     public void putCardData(String number, String month, String year, String owner, String code) {
         cardNumberField.setValue(number);
